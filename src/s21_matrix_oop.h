@@ -11,18 +11,15 @@ class S21Matrix {
   void createMatrix();
 
  public:
-  // default constructors
-  S21Matrix();
+  S21Matrix() noexcept;
   S21Matrix(int rows, int cols);
-
-  // copy constructor
   S21Matrix(const S21Matrix& other);
-
-  // move constructor
-  S21Matrix(S21Matrix&& other);
-
-  // destructor
+  S21Matrix(S21Matrix&& other) noexcept;
   ~S21Matrix();
+
+  // assignment operator overload
+  S21Matrix& S21Matrix::operator=(const S21Matrix& other);
+  S21Matrix& S21Matrix::operator=(S21Matrix&& other);
 };
 
 // default constructors
@@ -61,6 +58,30 @@ S21Matrix::~S21Matrix() {
       if (matrix_[i]) delete[] matrix_[i];
     delete[] matrix_;
   }
+}
+
+S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
+  if (this == &other) return *this;
+
+  S21Matrix copy(other);
+  *this = std::move(copy);
+  return *this;
+}
+
+S21Matrix& S21Matrix::operator=(S21Matrix&& other) {
+  if (this != &other) {
+    if (matrix_) {
+      for (int i = 0; i < rows_; i++)
+        if (matrix_[i]) delete[] matrix_[i];
+      delete[] matrix_;
+      matrix_ = nullptr;
+    }
+
+    std::swap(rows_, other.rows_);
+    std::swap(cols_, other.cols_);
+    std::swap(matrix_, other.matrix_);
+  }
+  return *this;
 }
 
 void S21Matrix::createMatrix() {
