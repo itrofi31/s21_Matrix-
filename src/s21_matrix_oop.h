@@ -20,6 +20,9 @@ class S21Matrix {
   // assignment operator overload
   S21Matrix& S21Matrix::operator=(const S21Matrix& other);
   S21Matrix& S21Matrix::operator=(S21Matrix&& other);
+
+  // index operator overload
+  double& S21Matrix::operator()(int row, int col);
 };
 
 // default constructors
@@ -82,6 +85,13 @@ S21Matrix& S21Matrix::operator=(S21Matrix&& other) {
     std::swap(matrix_, other.matrix_);
   }
   return *this;
+}
+
+double& S21Matrix::operator()(int row, int col) {
+  if (row < 0 || col < 0 || row >= rows_ || col >= cols_)
+    throw std::out_of_range("Out of range");
+
+  return matrix_[row][col];
 }
 
 void S21Matrix::createMatrix() {
