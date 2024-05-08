@@ -15,7 +15,13 @@ class S21Matrix {
   S21Matrix(int rows, int cols);
   S21Matrix(const S21Matrix& other);
   S21Matrix(S21Matrix&& other) noexcept;
-  ~S21Matrix();
+  ~S21Matrix() noexcept;
+
+  // setters and getters
+  int GetRows() noexcept;
+  int GetCols() noexcept;
+  void SetRows(int rows);
+  void SetCols(int cols);
 
   // assignment operator overload
   S21Matrix& S21Matrix::operator=(const S21Matrix& other);
@@ -55,7 +61,7 @@ S21Matrix::S21Matrix(S21Matrix&& other) noexcept
 }
 
 // destructor
-S21Matrix::~S21Matrix() {
+S21Matrix::~S21Matrix() noexcept {
   if (matrix_) {
     for (int i = 0; i < rows_; i++)
       if (matrix_[i]) delete[] matrix_[i];
@@ -63,6 +69,7 @@ S21Matrix::~S21Matrix() {
   }
 }
 
+// assignment operator overload
 S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
   if (this == &other) return *this;
 
@@ -87,11 +94,41 @@ S21Matrix& S21Matrix::operator=(S21Matrix&& other) {
   return *this;
 }
 
+// index operator overload
 double& S21Matrix::operator()(int row, int col) {
   if (row < 0 || col < 0 || row >= rows_ || col >= cols_)
     throw std::out_of_range("Out of range");
 
   return matrix_[row][col];
+}
+
+// setters and getters
+int S21Matrix::GetRows() noexcept { return rows_; }
+
+int S21Matrix::GetCols() noexcept { return cols_; }
+
+void S21Matrix::SetRows(int rows) {
+  if (rows < 0) {
+    throw std::length_error("Rows must be a positive number");
+
+    if (rows != rows_) {
+      S21Matrix copy(rows, cols_);
+      for (int i = 0; i < rows && i < rows_; i++)
+        for (int j = 0; j < cols_; j++) copy(i, j) = (*this)(i, j);
+    }
+  }
+}
+
+void S21Matrix::SetCols(int cols) {
+  if (cols < 0) {
+    throw std::length_error("Cols must be a positive number");
+
+    if (cols != cols_) {
+      S21Matrix copy(rows_, cols);
+      for (int i = 0; i < rows_; i++)
+        for (int j = 0; j < cols_ && j < cols; j++) copy(i, j) = (*this)(i, j);
+    }
+  }
 }
 
 void S21Matrix::createMatrix() {
