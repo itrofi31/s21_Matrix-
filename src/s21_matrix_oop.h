@@ -18,8 +18,8 @@ class S21Matrix {
   ~S21Matrix() noexcept;
 
   // setters and getters
-  int GetRows() noexcept;
-  int GetCols() noexcept;
+  int GetRows() const noexcept;
+  int GetCols() const noexcept;
   void SetRows(int rows);
   void SetCols(int cols);
 
@@ -28,7 +28,20 @@ class S21Matrix {
   S21Matrix& S21Matrix::operator=(S21Matrix&& other);
 
   // index operator overload
-  double& S21Matrix::operator()(int row, int col);
+  double& S21Matrix::operator()(int row, int col) const;
+
+  //
+  bool EqMatrix(const S21Matrix& other) const noexcept;
+  void SumMatrix(const S21Matrix& other);
+  void SubMatrix(const S21Matrix& other);
+  void MulNumber(const double num) noexcept;
+  void MulMatrix(const S21Matrix& other);
+  S21Matrix Transpose();
+  S21Matrix CalcComplements();
+  double Determinant();
+  S21Matrix InverseMatrix();
+
+  //
 };
 
 // default constructors
@@ -95,7 +108,7 @@ S21Matrix& S21Matrix::operator=(S21Matrix&& other) {
 }
 
 // index operator overload
-double& S21Matrix::operator()(int row, int col) {
+double& S21Matrix::operator()(int row, int col) const {
   if (row < 0 || col < 0 || row >= rows_ || col >= cols_)
     throw std::out_of_range("Out of range");
 
@@ -103,9 +116,9 @@ double& S21Matrix::operator()(int row, int col) {
 }
 
 // setters and getters
-int S21Matrix::GetRows() noexcept { return rows_; }
+int S21Matrix::GetRows() const noexcept { return rows_; }
 
-int S21Matrix::GetCols() noexcept { return cols_; }
+int S21Matrix::GetCols() const noexcept { return cols_; }
 
 void S21Matrix::SetRows(int rows) {
   if (rows < 0) {
