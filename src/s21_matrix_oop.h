@@ -131,6 +131,68 @@ void S21Matrix::SetCols(int cols) {
   }
 }
 
+bool S21Matrix::EqMatrix(const S21Matrix& other) const noexcept {
+  if (rows_ != other.rows_ || cols_ != other.cols_) return false;
+  for (int i = 0; i < rows_; i++)
+    for (int j = 0; j < cols_; j++)
+      if (std::fabs(this->matrix_[i][j] - other.matrix_[i][j]) > 1e-7)
+        return false;
+  return true;
+}
+
+void S21Matrix::SumMatrix(const S21Matrix& other) {
+  if (rows_ != other.rows_ || cols_ != other.cols_)
+    throw std::logic_error("Matrices have different size");
+  for (int i = 0; i < rows_; i++)
+    for (int j = 0; j < cols_; j++) {
+      (*this)(i, j) += other(i, j);
+    }
+}
+
+void S21Matrix::SubMatrix(const S21Matrix& other) {
+  if (rows_ != other.rows_ || cols_ != other.cols_)
+    throw std::logic_error("Matrices have different size");
+  for (int i = 0; i < rows_; i++)
+    for (int j = 0; j < cols_; j++) {
+      (*this)(i, j) -= other(i, j);
+    }
+}
+
+void S21Matrix::MulNumber(const double num) noexcept {
+  for (int i = 0; i < rows_; i++)
+    for (int j = 0; j < cols_; j++) {
+      (*this)(i, j) *= num;
+    }
+}
+
+void S21Matrix::MulMatrix(const S21Matrix& other) {
+  if (cols_ != other.rows_)
+    throw std::logic_error(
+        "Incorrect size of matrices, rows must be equal to columns");
+
+  S21Matrix result(rows_, other.cols_);
+  for (int i = 0; i < rows_; i++)
+    for (int j = 0; j < other.cols_; j++) {
+      result(i, j) = 0;
+      for (int k = 0; k < cols_; k++)
+        result(i, j) += (*this)(i, k) * other(k, j);
+    }
+  *this = std::move(result);
+}
+
+S21Matrix S21Matrix::Transpose() {
+  S21Matrix result(cols_, rows_);
+  for (int i = 0; i < rows_; i++)
+    for (int j = 0; j < cols_; j++) {
+      result(j, i) = (*this)(i, j);
+    }
+  return result;
+}
+
+S21Matrix S21Matrix::CalcComplements() {}
+double S21Matrix::Determinant() {}
+S21Matrix S21Matrix::InverseMatrix() {}
+
 void S21Matrix::createMatrix() {
   if (rows_ == 0 && cols_ == 0)
     matrix_ = nullptr;
