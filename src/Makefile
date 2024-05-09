@@ -1,7 +1,7 @@
 FLAGS = -std=c++17 -Wall -Werror -Wextra
 TEST = tests/tests.cc
-GCOV = -ftest-coverage -fprofile-arcs
-
+GCOV FLAGS = -ftest-coverage -fprofile-arcs
+TEST_FLAGS = -lgtest -lpthread
 all: s21_matrix_oop.a
 
 s21_matrix_oop.a: s21_matrix_oop.cc
@@ -11,15 +11,15 @@ s21_matrix_oop.a: s21_matrix_oop.cc
 	
 
 test: rebuild s21_matrix_oop.a
-	g++ $(FLAGS) $(TEST) s21_matrix_oop.a -lgtest -lpthread -o $@
+	g++ $(FLAGS) $(TEST) s21_matrix_oop.a $(TEST_FLAGS) -o $@
 	./test
 
 gcov_report: rebuild
 	g++ $(FLAGS) -c $(TEST) 
-	g++ $(FLAGS) $(GCOV)  -c *.cc 
-	g++ $(FLAGS) $(GCOV) *.o -lgtest -lpthread  -o gcovreport 
+	g++ $(FLAGS) $(GCOV FLAGS) -c *.cc 
+	g++ $(FLAGS) $(GCOV FLAGS) *.o $(TEST_FLAGS) -o gcovreport 
 	./gcovreport
-	lcov -t "gcovreport" -o gcovreport.info -c -d .
+	lcov -t "gcovreport" -o gcovreport.info -c -d . --exclude "v1/*" 
 	genhtml -o report gcovreport.info
 	open report/./index.html
 
