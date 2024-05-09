@@ -233,7 +233,6 @@ S21Matrix S21Matrix::CalcComplements() {
   if (rows_ <= 0 || cols_ <= 0)
     throw std::out_of_range("Rows and columns must be positive.");
 
-  double determinant = 0;
   S21Matrix result(rows_, cols_);
   if (rows_ == 1 && cols_ == 1)
     result(0, 0) = 1;

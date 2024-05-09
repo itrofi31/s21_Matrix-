@@ -20,21 +20,21 @@ class S21Matrix {
   void SetCols(int cols);
 
   // assignment and move operators overload
-  S21Matrix& S21Matrix::operator=(const S21Matrix& other);
-  S21Matrix& S21Matrix::operator=(S21Matrix&& other);
+  S21Matrix& operator=(const S21Matrix& other);
+  S21Matrix& operator=(S21Matrix&& other);
 
   // operators overload
-  double& S21Matrix::operator()(int row, int col) const;
-  S21Matrix S21Matrix::operator+(const S21Matrix& other) const;
-  S21Matrix S21Matrix::operator-(const S21Matrix& other) const;
-  S21Matrix S21Matrix::operator*(const S21Matrix& other) const;
-  S21Matrix S21Matrix::operator*(const double num) const;
+  double& operator()(int row, int col) const;
+  S21Matrix operator+(const S21Matrix& other) const;
+  S21Matrix operator-(const S21Matrix& other) const;
+  S21Matrix operator*(const S21Matrix& other) const;
+  S21Matrix operator*(const double num) const;
   friend S21Matrix operator*(const double& value, const S21Matrix& matrix);
-  bool S21Matrix::operator==(const S21Matrix& other) const;
-  S21Matrix& S21Matrix::operator+=(const S21Matrix& other);
-  S21Matrix& S21Matrix::operator-=(const S21Matrix& other);
-  S21Matrix& S21Matrix::operator*=(const S21Matrix& other);
-  S21Matrix& S21Matrix::operator*=(const double num);
+  bool operator==(const S21Matrix& other) const;
+  S21Matrix& operator+=(const S21Matrix& other);
+  S21Matrix& operator-=(const S21Matrix& other);
+  S21Matrix& operator*=(const S21Matrix& other);
+  S21Matrix& operator*=(const double num);
 
   // matrix operations
   bool EqMatrix(const S21Matrix& other) const noexcept;
@@ -55,6 +55,6 @@ class S21Matrix {
   void createMatrix();
 
   // helpers
-  S21Matrix S21Matrix::GetMinor(int rows, int cols) const;
+  S21Matrix GetMinor(int rows, int cols) const;
 };
 #endif
