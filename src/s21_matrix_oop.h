@@ -47,14 +47,14 @@ class S21Matrix {
   double Determinant();
   S21Matrix InverseMatrix();
 
+  // helpers
+  S21Matrix GetMinor(int rows, int cols) const;
+
  private:
   int rows_, cols_;
   double** matrix_;
 
   // memory allocation for matrix
   void createMatrix();
-
-  // helpers
-  S21Matrix GetMinor(int rows, int cols) const;
 };
 #endif
