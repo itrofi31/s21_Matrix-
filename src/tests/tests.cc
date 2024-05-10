@@ -262,6 +262,19 @@ TEST(functions, complements2) {
   EXPECT_THROW(m.CalcComplements(), std::logic_error);
 }
 
+TEST(functions, complements3) {
+  int rows = 1;
+  int cols = 1;
+
+  S21Matrix given(rows, cols);
+
+  given(0, 0) = 1.0;
+
+  S21Matrix res = given.CalcComplements();
+
+  ASSERT_TRUE(res(0, 0) == 1);
+}
+
 TEST(functions, inverse) {
   int size = 3;
   S21Matrix given(size, size);
@@ -306,6 +319,62 @@ TEST(operators, assignment_operator) {
   EXPECT_DOUBLE_EQ(m2(1, 1), 4);
 }
 
+TEST(errors, error1) {
+  S21Matrix A(2, 3);
+  EXPECT_THROW(A.CalcComplements(), std::logic_error);
+}
+
+TEST(errors, error3) {
+  S21Matrix A(1, 2);
+  EXPECT_THROW(A.Determinant(), std::logic_error);
+}
+
+TEST(errors, error6) {
+  S21Matrix A(1, 2);
+  EXPECT_THROW(A.InverseMatrix(), std::logic_error);
+}
+TEST(errors, error7) {
+  S21Matrix A(2, 3);
+  S21Matrix B(3, 2);
+  EXPECT_THROW(A.SumMatrix(B), std::logic_error);
+}
+TEST(errors, error8) {
+  S21Matrix A(1, 4);
+  S21Matrix B(4, 1);
+  EXPECT_THROW(A.SubMatrix(B), std::logic_error);
+}
+TEST(errors, error9) {
+  S21Matrix A(1, 4);
+  S21Matrix B(5, 1);
+  EXPECT_THROW(A.MulMatrix(B), std::logic_error);
+}
+TEST(errors, error10) {
+  EXPECT_THROW(S21Matrix A(1, -1);, std::invalid_argument);
+}
+TEST(errors, set_cols_error) {
+  S21Matrix A;
+  EXPECT_THROW(A.SetCols(-1), std::length_error);
+}
+TEST(errors, set_rows_error) {
+  S21Matrix A;
+  EXPECT_THROW(A.SetRows(-1), std::length_error);
+}
+
+TEST(errors, compl_out_of_range) {
+  S21Matrix A(0, 0);
+  EXPECT_THROW(A.CalcComplements(), std::out_of_range);
+}
+
+TEST(errors, inverse) {
+  S21Matrix A(1, 1);
+  A(0, 0) = 0;
+  EXPECT_THROW(A.InverseMatrix(), std::logic_error);
+}
+
+TEST(errors, index_operator) {
+  S21Matrix A(1, 1);
+  EXPECT_THROW(A(-1, 0), std::logic_error);
+}
 int main() {
   testing::InitGoogleTest();
   if (RUN_ALL_TESTS()) {

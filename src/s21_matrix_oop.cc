@@ -261,8 +261,6 @@ double S21Matrix::Determinant() {
 }
 
 S21Matrix S21Matrix::GetMinor(int row, int col) const {
-  if (row < 0 || col < 0 || row >= rows_ || col >= cols_)
-    throw std::out_of_range("Incorrect size of matrix");
   if (rows_ != cols_) throw std::logic_error("Matrix must be square");
 
   S21Matrix minor(rows_ - 1, cols_ - 1);
