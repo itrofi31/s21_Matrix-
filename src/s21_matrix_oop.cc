@@ -71,26 +71,24 @@ int S21Matrix::GetCols() const noexcept { return cols_; }
 
 // setters
 void S21Matrix::SetRows(int rows) {
-  if (rows < 0) {
-    throw std::length_error("Rows must be positive");
+  if (rows < 0) throw std::length_error("Rows must be positive");
 
-    if (rows != rows_) {
-      S21Matrix copy(rows, cols_);
-      for (int i = 0; i < rows && i < rows_; i++)
-        for (int j = 0; j < cols_; j++) copy(i, j) = (*this)(i, j);
-    }
-  }
+  // if (rows != rows_) {
+  S21Matrix copy(rows, cols_);
+  for (int i = 0; i < rows && i < rows_; i++)
+    for (int j = 0; j < cols_; j++) copy(i, j) = (*this)(i, j);
+  (*this) = std::move(copy);
+  // }
 }
 
 void S21Matrix::SetCols(int cols) {
-  if (cols < 0) {
-    throw std::length_error("Cols must be positive");
+  if (cols < 0) throw std::length_error("Cols must be positive");
 
-    if (cols != cols_) {
-      S21Matrix copy(rows_, cols);
-      for (int i = 0; i < rows_; i++)
-        for (int j = 0; j < cols_ && j < cols; j++) copy(i, j) = (*this)(i, j);
-    }
+  if (cols != cols_) {
+    S21Matrix copy(rows_, cols);
+    for (int i = 0; i < rows_; i++)
+      for (int j = 0; j < cols_ && j < cols; j++) copy(i, j) = (*this)(i, j);
+    (*this) = std::move(copy);
   }
 }
 
